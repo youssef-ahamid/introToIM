@@ -8,7 +8,7 @@ const int PWMB = 10;           //speed control pin on the motor driver for the l
 const int BIN2 = 9;           //control pin 2 on the motor driver for the left motor
 const int BIN1 = 8;           //control pin 1 on the motor driver for the left motor
 
-
+const int speed = 255;      //motor speed
 //distance variables
 const int trigPin = 6;
 const int echoPin = 5;
@@ -78,20 +78,20 @@ void loop()
       flash(leftIndicatorPin, rightIndicatorPin); //blinking indicators
 
       //back up
-      rightMotor(-255);
-      leftMotor(-255);
+      rightMotor(-speed);
+      leftMotor(-speed);
       flash(leftIndicatorPin, rightIndicatorPin); //blinking indicators
 
       //turn away from obstacle
-      rightMotor(255);
-      leftMotor(-255);
+      rightMotor(speed);
+      leftMotor(-speed);
       flash(rightIndicatorPin, rightIndicatorPin); //will only blink right indicator
 
     } else {                        //if no obstacle is detected drive forward
       Serial.print(" ");
       Serial.print("Moving...");
-      rightMotor(255);
-      leftMotor(255);
+      rightMotor(speed);
+      leftMotor(speed);
     }
   } else {                        //if the switch is off then stop
 
