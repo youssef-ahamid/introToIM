@@ -3,6 +3,12 @@ The IM (Self-Driven) Rover is comprised of chassis, two motorized wheels, one 36
 
 ## Pictures of electronics and wiring
 
+[<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/bottom.jpg" alt="bottom" width="400">](#)
+[<img align="right" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/front.JPG" alt="front" width="400">](#)
+
+[<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/top.JPG" alt="top" width="400">](#)
+[<img align="right" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/side.jpg" alt="side" width="400">](#)
+
 ## Components:
 1.	2x Gear Motors
 2.	2x Car Tires
