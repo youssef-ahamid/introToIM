@@ -36,3 +36,13 @@ The biggest problem I faced with this project is that one of the DC motors is al
 
 ## Here are pictures of the final product!
 
+[<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/1.JPG" alt="1" width="400">](#)
+[<img align="right" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/2.JPG" alt="2" width="400">](#)
+
+[<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/3.JPG" alt="3" width="400">](#)
+[<img align="right" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/4.JPG" alt="4" width="400">](#)
+
+[<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/5.JPG" alt="5" width="400">](#)
+[<img align="right" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/6.JPG" alt="6" width="400">](#)
+
+
