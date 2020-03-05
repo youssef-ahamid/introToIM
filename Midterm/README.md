@@ -27,6 +27,8 @@ The IM (Self-Driven) Rover is comprised of chassis, two motorized wheels, one 36
 
 ## A schematic diagram of the circuit is shown below
 
+[<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/Midterm/schematic.jpg" alt="schematic" width="1000">](#)
+
 ## Project Description
 
 The car drives straight ahead whenever the switch is turned on, and will keep going forward until an object is detected with the ultrasonic sensor. In my code, I calculate the distance between the ultrasonic sensor (the front of the car) and the nearest object to it using the function getDistance(). If this distance is less than 20 inches, the car will stop, back up, and turn right. This is accomplished by manipulating the gear motors using the motor driver. The motor driver takes input from the Arduino board at pins A1, A2 and B1, B2 to drive both motors using pins A11, A12 and B11, B12 respectively (output). Setting either one of the motor driver’s input pins as HIGH and the other as LOW will cause the motor driver to drive in a particular direction. Alternating their digital values will cause current in the gear motors to flow in the opposite direction thus reversing their rotation. Initially, when the car is driving forward, both gear motors drive at the same speed of 255. Whenever an obstacle is detected, the digital values of the motor driver’s input pins (A1-A2, B1-B2) will be reversed, causing the car to drive backwards. After some delay, the left motor is set at a speed higher than the right one, causing the car to move to the right. The flashing yellow indicators blink whenever an obstacle is detected, and the right indicator will blink while maneuvering to the right.
