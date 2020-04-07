@@ -1,8 +1,9 @@
 # Snake
-A remake of the snake game done using OOP.
+## A remake of the snake game done using OOP. Game won't work if images on this folder are in the same folder as snake.pde
 
 # Screenshot
 [<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/April_7/screenshot.png" alt="screenshot" width="800">](#)
+
 
 
 # Classes
@@ -16,7 +17,18 @@ A class representing individual circle in the snake. Shows the snake element in 
 Controls moving/adding snake elements and checking for lose condition
 
 ## Game
-Spawns Snake, controls fruit creation, tracks score, pauses game, brings everything together 
+Spawns Snake, controls fruit creation, tracks score, pauses game, brings everything together
+
+# Features
+- Graphics
+
+- Ability to pause game by pressing the spacebar
+
+- Ability to restart game
+
+- Snake wraparound
+
+- Score tracking
 
 
 
