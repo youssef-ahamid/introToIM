@@ -1,1 +1,1 @@
-# Google Dinosoar game clone
+# Google Dinosaur game clone
