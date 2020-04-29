@@ -210,7 +210,7 @@ class Game {                                                       // Game objec
     popStyle();
   }                                                        
 
-  void restartScreen() {                                               // showing the game over screen          
+  void restartScreen() {                                                // showing the game over screen          
     pushStyle();                                                        
     imageMode(CENTER);
     image(restart, width/2, height/2, 36, 32);                          // displaying restart image                              
@@ -228,8 +228,7 @@ void changeColor(PImage img) {                                           // chan
     if (img.pixels[i] == color(255) || img.pixels[i] == color(0)) {      // if the color is white or black                                                 
       continue;                                                          // skip
     } else if (alpha(img.pixels[i]) != 0) {                              // if the pixel is not transparent (because image type is png with transparent backgrounds                          
-      img.pixels[i] = color(r, g, b);
-      ;                                   // changing the color of the pixel                     
+      img.pixels[i] = color(r, g, b);                                    // changing the color of the pixel                     
       img.updatePixels();                                                // update the image
     }
   }
