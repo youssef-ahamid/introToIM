@@ -3,6 +3,8 @@
  Title: Google Dinosaur game clone
  Class: Intro to IM
  Date: 30/04/2020 
+ 
+ Link to game: https://chromedino.com/
  */
 
 import java.util.ArrayList; 
