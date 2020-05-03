@@ -1,4 +1,4 @@
-[<img align="right" src="https://github.com/youssef-ahamid/introToIM/blob/master/harold.png" alt="Icy Tower" width="100">](#)
+[<img align="right" src="https://github.com/youssef-ahamid/introToIM/blob/master/Final_Project/harold.png" alt="Icy Tower" width="100">](#)
 
 
 # Icy Tower Clone
@@ -12,9 +12,7 @@ Icy Tower is a PC game from mid 2000's (my favorite game of all time). It is set
 - The faster you run, the higher you jump
 - Make double or triple jumps to activate combo mode and gain extra score
 
-[<img align="center" src="https://github.com/youssef-ahamid/introToIM/blob/master/icy_tower.jpg" alt="Icy Tower" width="350">](#)
-
-
+[<img align="left" src="https://github.com/youssef-ahamid/introToIM/blob/master/Final_Project/icy_tower.jpg" alt="Icy Tower" width="480">](#)
 ## Features
 - Music and sound effects
 - Graphics
@@ -25,6 +23,7 @@ Icy Tower is a PC game from mid 2000's (my favorite game of all time). It is set
 - Turn music and sound effects on/off
 - Change difficulty
 - Change character
+
 
 ## Plan for code: OOP
 Code will contain the following classes:
