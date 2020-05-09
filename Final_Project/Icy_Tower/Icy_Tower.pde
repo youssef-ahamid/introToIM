@@ -1,39 +1,17 @@
 import java.util.ArrayList; 
-import java.util.*;
-
 
 Character player;
-int ground;
-PImage[] platforms = new PImage[1];
+PImage[] platforms = new PImage[4];
 PImage img;
-PImage  pauseimg, playimg, instructionsimg, soundimg, play_againimg, main_menuimg, leaderimg, 
-  optionsimg, backimg, options_screenimg, bg1, bg2, bg3, bg4, bg5, transparentimg;
 Main main;
-Button pause;                                          
-Button play;
-Button instructions;
-Button sound;
-Button play_again;
-Button main_menu;
-Button leader;
-Button options;
-Button musicOn;
-Button soundFxOn;
-Button musicOff;
-Button soundFxOff;
-Button rookie;
-Button amateur;
-Button pro;
-Button legend;
-Button character1;
-Button character2;
-Button back;
-Screen options_screen;
-Screen home_screen;
-Screen instructions_screen;
-Screen game_screen;
-Screen leaderboard_screen;
+PImage playimg, instructionsimg, play_againimg, main_menuimg, leaderimg, 
+  optionsimg, backimg, options_screenimg, bg1, bg2, bg3, bg4, bg5, transparentimg;
+Button pause, play, instructions, sound, play_again, main_menu, leader, options, musicOn, soundFxOn, 
+  musicOff, soundFxOff, rookie, amateur, pro, legend, character1, character2, back;
+Screen options_screen, home_screen, instructions_screen, game_screen, leaderboard_screen;
 Sprite[] haroldSprite = new Sprite[6];
+Sprite[] discoDaveSprite = new Sprite[6];
+Table leaderboard;
 
 class Sprite {
   PImage img;
@@ -116,10 +94,10 @@ class Floor {
   int floor;
 
   Floor(int floor_nmbr, int y) {
-    dimentions = new PVector(random(200, 600), 50);
-    position = new PVector(random(width - dimentions.x), y);
     speed = 0.01;
     floor = floor_nmbr;
+    dimentions = new PVector(random(200, 600 - 75*(int(floor/100)+1)), 50);
+    position = new PVector(random(width - dimentions.x), y);
   }
   Floor() {
     dimentions = new PVector(width, 50);
@@ -129,10 +107,7 @@ class Floor {
   }
 
   void display() {
-    //fill(0, 130, 210);
-    //rect(position.x, position.y+game.screenShift, dimentions.x, dimentions.y);
-    //img.resize(int(dimentions.x), int(dimentions.y));
-    image(img, position.x, position.y+main.game.screenShift, dimentions.x, dimentions.y);
+    image(platforms[int(floor/100) % 4], position.x, position.y+main.game.screenShift, dimentions.x, dimentions.y);
     update();
   }
   void update() {
@@ -160,8 +135,6 @@ class Character {
   }
 
   void display() {
-    // fill(210, 130, 0);
-    // circle(position.x, position.y+game.screenShift, diameter);
     if (boostMode) {
       mySprite[4].playAnimation(position, 1);
       if (velocity.y > 3) boostMode = false;
@@ -176,7 +149,6 @@ class Character {
     else if (abs(velocity.x) < 0.5) mySprite[0].playAnimation(position, 1);
     else if (velocity.x < 0.5) mySprite[1].playAnimation(position, -1);
     else if (velocity.x > 0.5) mySprite[1].playAnimation(position, 1);
-    //idle.playAnimation(position, 1);
     update();
   }
   void update() {
@@ -258,9 +230,9 @@ class Game {
         screenShift -= player.velocity.y - 2;
       } else {
         if ( player.velocity.y>0) {
-          screenShift += 1;
+          screenShift += main.difficulty*1.5;
         } else {
-          screenShift -= int(player.velocity.y/6)-1;
+          screenShift -=int(player.velocity.y/6)- main.difficulty*1.5;
         }
       }
     }
@@ -280,21 +252,39 @@ class Game {
 }
 
 class Main {
-  Game game;
   Screen currentScreen;
-  float difficulty;
+  float difficulty = 1;
+  Game game;
   Sprite[] character;
 
   Main() {
     game = new Game();
     currentScreen = home_screen;
-    difficulty = 1;
     character = haroldSprite;
   }
+
   void run() {
     if (currentScreen == game_screen) game.display();
     else currentScreen.run();
+    if (currentScreen == leaderboard_screen) {
+      fill(0);
+      textSize(40);
+      textAlign(LEFT);
+      text("Name", 250, 250);
+      text("Score", 450, 250);
+      text("Floor", 600, 250);
+      text("Difficulty", 750, 250);
+      textSize(26);
+      for (int i = 0; i < 8; i++){
+        TableRow row = leaderboard.getRow(i); 
+        text(row.getString("Name"), 250, 300 + 50*i);
+        text(row.getInt("score"), 450, 300 + 50*i);
+        text(row.getInt("floor"), 600, 300 + 50*i);
+        text(row.getString("difficulty"), 750, 300 + 50*i);
+      }
+    }
   }
+
   void buttonClicked(Button bt) {
     if (bt == back || bt == main_menu) {
       currentScreen = home_screen;
@@ -320,42 +310,41 @@ class Main {
     } else if (bt == soundFxOff) {
       soundFxOn.on = false;
       soundFxOff.on = true;
-    } else if (bt == rookie){
+    } else if (bt == rookie) {
       difficulty = 1;
       rookie.on = true;
       amateur.on = false;
       pro.on = false;
       legend.on = false;
-    } else if (bt == amateur){
+    } else if (bt == amateur) {
       difficulty = 1.25;
       rookie.on = false;
       amateur.on = true;
       pro.on = false;
       legend.on = false;
-    } else if (bt == pro){
+    } else if (bt == pro) {
       difficulty = 1.5;
       rookie.on = false;
       amateur.on = false;
       pro.on = true;
       legend.on = false;
-    } else if (bt == legend){
+    } else if (bt == legend) {
       difficulty = 2;
       rookie.on = false;
       amateur.on = false;
       pro.on = false;
       legend.on = true;
-    } else if (bt == character1){
+    } else if (bt == character1) {
       character1.on = true;
       character2.on = false;
       player.mySprite = haroldSprite;
-    } else if (bt == character2){
+    } else if (bt == character2) {
       character1.on = false;
       character2.on = true;
-      player.mySprite = haroldSprite;
+      player.mySprite = discoDaveSprite;
     }
-    
   }
-  
+
   void restartGame() {
     player = new Character(character);
     game = new Game();
@@ -365,7 +354,10 @@ class Main {
 
 void setup() {
   size(1150, 800);
-  img = loadImage("floor1.png");
+  platforms[0] = loadImage("platform1.png");
+  platforms[1] = loadImage("platform2.png");
+  platforms[2] = loadImage("platform3.png");
+  platforms[3] = loadImage("platform4.png");
   playimg = loadImage("play.png");
   instructionsimg = loadImage("instructions.png");
   play_againimg = loadImage("play-again.png"); 
@@ -411,7 +403,13 @@ void setup() {
   haroldSprite[3] = new Sprite("jumping2-harold.png", 38, 71, 1);
   haroldSprite[4] = new Sprite("spinning-harold.png", 60, 60, 12);
   haroldSprite[5] = new Sprite("falling-harold.png", 38, 71, 1);
-
+  discoDaveSprite[0] = new Sprite("idle-DiscoDave.png", 38, 73, 4);
+  discoDaveSprite[1] = new Sprite("walking-DiscoDave.png", 38, 73, 4);
+  discoDaveSprite[2] = new Sprite("jumping-DiscoDave.png", 38, 71, 1);
+  discoDaveSprite[3] = new Sprite("jumping2-DiscoDave.png", 38, 71, 1);
+  discoDaveSprite[4] = new Sprite("spinning-DiscoDave.png", 60, 60, 12);
+  discoDaveSprite[5] = new Sprite("falling-DiscoDave.png", 38, 71, 1);
+  leaderboard = loadTable("leaderboard.csv", "header");
   player = new Character(haroldSprite);
   main = new Main();
 }
