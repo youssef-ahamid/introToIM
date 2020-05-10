@@ -5,7 +5,7 @@ PImage[] platforms = new PImage[4];
 PImage img;
 Main main;
 PImage playimg, instructionsimg, play_againimg, main_menuimg, leaderimg, 
-  optionsimg, backimg, options_screenimg, bg1, bg2, bg3, bg4, bg5, transparentimg;
+  optionsimg, backimg, options_screenimg, bg1, bg2, bg3, bg4, bg5, transparentimg, gameOverimg;
 Button pause, play, instructions, sound, play_again, main_menu, leader, options, musicOn, soundFxOn, 
   musicOff, soundFxOff, rookie, amateur, pro, legend, character1, character2, back;
 Screen options_screen, home_screen, instructions_screen, game_screen, leaderboard_screen;
@@ -90,7 +90,6 @@ class Screen {
 class Floor {
   PVector position, dimentions;
   float speed;
-  // PImage img;
   int floor;
 
   Floor(int floor_nmbr, int y) {
@@ -118,7 +117,7 @@ class Floor {
 
 class Character {
   PVector position, velocity, acceleration;
-  boolean boostMode;
+  boolean boostMode, dead;
   float diameter;
   PImage img;
   float ground;
@@ -126,6 +125,7 @@ class Character {
   Sprite [] mySprite;
 
   Character(Sprite [] sprite) {
+
     mySprite = sprite;
     diameter =  150;
     ground = height - diameter/2 - 50;
@@ -152,6 +152,7 @@ class Character {
     update();
   }
   void update() {
+    if (-position.y < main.game.screenShift - height) dead = true;
     position.add(velocity);
     velocity.add(acceleration);
     hitGround();
@@ -163,8 +164,6 @@ class Character {
       if (position.y + velocity.y > ground) velocity.y = ground - position.y;
       acceleration.y = 2;
     }
-
-
     if (abs(velocity.x) < 1) {
       velocity.x = 0;
       acceleration.x = 0;
@@ -210,11 +209,15 @@ class Character {
 }
 
 class Game {
+  boolean gotHighScore, gotName;
+  String name;
   int score;
   float screenShift;
   ArrayList<Floor> floors;
   ;
   Game() {
+    name = "";
+    gotHighScore = gotName = false;
     floors = new ArrayList<Floor>();
     screenShift = 0;
     floors.add(new Floor());
@@ -225,28 +228,65 @@ class Game {
   }
   void display() {
     score = player.floor*10;
-    if (player.position.y <= 0) {
-      if (screenShift + player.position.y <= 100) {
-        screenShift -= player.velocity.y - 2;
-      } else {
-        if ( player.velocity.y>0) {
-          screenShift += main.difficulty*1.5;
-        } else {
-          screenShift -=int(player.velocity.y/6)- main.difficulty*1.5;
-        }
-      }
-    }
-
     for ( Floor floor : floors) {
       floor.display();
     }
-    player.display();
-    update();
+    if (!player.dead) {
+      if (player.position.y <= 0) {
+        if (screenShift + player.position.y <= 100) {
+          screenShift -= player.velocity.y - 2;
+        } else {
+          if ( player.velocity.y>0) {
+            screenShift += main.difficulty*1.5;
+          } else {
+            screenShift -=int(player.velocity.y/6)- main.difficulty*1.5;
+          }
+        }
+      }
+      player.display();
+      update();
+    } else gameOver();
   }
+
   void update() {
     if ( floors.get(floors.size()-1).position.y >= 150 - screenShift) {
       floors.add(new Floor(floors.get(floors.size()-1).floor+1, -int(screenShift)));
       floors.remove(0);
+    }
+  }
+
+  void gameOver() {
+    if (score > leaderboard.getRow(7).getInt("score") && !gotHighScore) {
+      getName();
+    } else {
+      image(gameOverimg, width/2 - 200, height/2 - 170, 400, 340);
+      textSize(30);
+      textAlign(LEFT);
+      fill(0);
+      text(score, width/2 + 50, height/2 - 40);
+      text(player.floor, width/2 + 50, height/2+20);
+      for (Button bt : game_screen.buttons) bt.display();
+    }
+  }
+
+
+  void getName() {
+    if (!gotName) {
+      textSize(50);
+      textAlign(CENTER);
+      text("Enter Name", width/2, height/2 - 100);
+      text(name, width/2, height/2 + 50);
+    } else {
+      leaderboard.getRow(7).setString("Name", main.game.name);
+      leaderboard.getRow(7).setInt("score", score);
+      leaderboard.getRow(7).setInt("floor", player.floor);
+      if (main.difficulty == 1) leaderboard.getRow(7).setString("difficulty", "rookie");
+      else if (main.difficulty == 1.25) leaderboard.getRow(7).setString("difficulty", "amateur");
+      else if (main.difficulty == 1.5) leaderboard.getRow(7).setString("difficulty", "pro");
+      else if (main.difficulty == 2) leaderboard.getRow(7).setString("difficulty", "legend");
+      leaderboard.sortReverse("score");
+      saveTable(leaderboard, "leaderboard.csv");
+      gotHighScore = true;
     }
   }
 }
@@ -258,7 +298,7 @@ class Main {
   Sprite[] character;
 
   Main() {
-    game = new Game();
+    //game = new Game();
     currentScreen = home_screen;
     character = haroldSprite;
   }
@@ -275,7 +315,7 @@ class Main {
       text("Floor", 600, 250);
       text("Difficulty", 750, 250);
       textSize(26);
-      for (int i = 0; i < 8; i++){
+      for (int i = 0; i < 8; i++) {
         TableRow row = leaderboard.getRow(i); 
         text(row.getString("Name"), 250, 300 + 50*i);
         text(row.getInt("score"), 450, 300 + 50*i);
@@ -289,6 +329,7 @@ class Main {
     if (bt == back || bt == main_menu) {
       currentScreen = home_screen;
     } else if (bt == play) {
+      restartGame();
       currentScreen = game_screen;
     } else if (bt == instructions) {
       currentScreen = instructions_screen;
@@ -337,11 +378,11 @@ class Main {
     } else if (bt == character1) {
       character1.on = true;
       character2.on = false;
-      player.mySprite = haroldSprite;
+      character = haroldSprite;
     } else if (bt == character2) {
       character1.on = false;
       character2.on = true;
-      player.mySprite = discoDaveSprite;
+      character = discoDaveSprite;
     }
   }
 
@@ -371,10 +412,11 @@ void setup() {
   bg4= loadImage("instructions.jpg"); 
   bg5= loadImage("high-scores.jpg"); 
   transparentimg= loadImage("transparent.png");
+  gameOverimg = loadImage("game-over.png");
   play = new Button(700, 400, 271, 76, playimg );
   instructions = new Button(700, 500, 271, 76, instructionsimg);
-  play_again = new Button(400, 550, 134, 34, play_againimg);
-  main_menu = new Button(400, 600, 134, 34, main_menuimg);
+  play_again = new Button(415, 480, 134, 34, play_againimg);
+  main_menu = new Button(415, 530, 134, 34, main_menuimg);
   leader = new Button(700, 600, 271, 76, leaderimg);
   options = new Button(700, 700, 192, 58, optionsimg);
   musicOn = new Button(750, 105, 90, 60, true);
@@ -410,6 +452,8 @@ void setup() {
   discoDaveSprite[4] = new Sprite("spinning-DiscoDave.png", 60, 60, 12);
   discoDaveSprite[5] = new Sprite("falling-DiscoDave.png", 38, 71, 1);
   leaderboard = loadTable("leaderboard.csv", "header");
+  leaderboard.sortReverse("score");
+
   player = new Character(haroldSprite);
   main = new Main();
 }
@@ -420,6 +464,7 @@ void draw() {
 }
 
 void mouseClicked() {
+  // println(mouseX, "    ", mouseY);
   for (Button bt : main.currentScreen.buttons) {
     if (bt.hoveredOver()) {
       main.buttonClicked(bt);
@@ -432,6 +477,12 @@ void keyPressed() {
   if (keyCode == LEFT) player.moveLeft();                                               
   else if (keyCode == RIGHT) player.moveRight();                                                         
   else if (key == ' ') player.jump();
+
+  if (main.currentScreen == game_screen  && player.dead) {
+    if (key == DELETE || key == BACKSPACE && main.game.name.length() > 0) main.game.name = main.game.name.substring(0, main.game.name.length() - 1);
+    else if (key == RETURN || key == ENTER) main.game.gotName = true;
+    else if ( (int) key < 123 && (int) key >= 97 || key == ' ') main.game.name += key;
+  }
 }
 void keyReleased() {
   if (keyCode == LEFT && player.velocity.x < 0) player.velocity.x = 0;                                               
