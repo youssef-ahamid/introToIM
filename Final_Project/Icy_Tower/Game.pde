@@ -15,8 +15,10 @@ class Game {
     floors.add(new Floor(3, 250));
     floors.add(new Floor(4, 100));
   }
+
   void display() {
     score = int(player.floor*10*main.difficulty);
+
     for ( Floor floor : floors) {
       floor.display();
     }
@@ -32,6 +34,7 @@ class Game {
           }
         }
       }
+      displayScore();
       player.display();
       update();
     } else gameOver();
@@ -42,22 +45,33 @@ class Game {
       floors.add(new Floor(floors.get(floors.size()-1).floor+1, -int(screenShift)));
       floors.remove(0);
     }
+  } 
+
+  void displayScore() {
+    fill(255);
+    textFont(myFont);
+    textAlign(LEFT);
+    text("Score: " + score, 30, height-50);
   }
 
   void gameOver() {
+    if (score > leaderboard.getRow(7).getInt("score")) image(highScoreImg, width/2 - 230, height/2 - 200);
     if (!gotHighScore) {
       int index = 7;
-      while (!flag && index > -1 && score > leaderboard.getRow(index).getInt("score")) {
-        TableRow row = leaderboard.getRow(index);
-        leaderboard.getRow(index+1).setString("Name", row.getString("Name"));
-        leaderboard.getRow(index+1).setInt("score", row.getInt("score"));
-        leaderboard.getRow(index+1).setInt("floor", row.getInt("floor"));
-        leaderboard.getRow(index+1).setString("difficulty", row.getString("difficulty"));
-        leaderboardpos = index;
-        index-=1;
+      if (!flag) {
+        while (index > -1 && score > leaderboard.getRow(index).getInt("score")) {
+          TableRow row = leaderboard.getRow(index);
+          leaderboard.getRow(index+1).setString("Name", row.getString("Name"));
+          leaderboard.getRow(index+1).setInt("score", row.getInt("score"));
+          leaderboard.getRow(index+1).setInt("floor", row.getInt("floor"));
+          leaderboard.getRow(index+1).setString("difficulty", row.getString("difficulty"));
+          leaderboardpos = index;
+          index-=1;
+        }
+        leaderboard.removeRow(8);
       }
       flag = true;
-      if (leaderboardpos  > -1) {
+      if (leaderboardpos  > -1 && leaderboardpos < 8) {
         getName();
       }
     } else {
@@ -70,12 +84,16 @@ class Game {
       for (Button bt : game_screen.buttons) bt.display();
     }
   }
+
   void getName() {
     if (!gotName) {
-      textSize(50);
       textAlign(CENTER);
-      text("Enter Name", width/2, height/2 - 100);
+      textSize(50);
       text(name, width/2, height/2 + 50);
+      pushStyle();      
+      textFont(myFont);
+      text("Enter Name", width/2, height/2 - 50);
+      popStyle();
     } else {
       leaderboard.getRow(leaderboardpos).setString("Name", main.game.name);
       leaderboard.getRow(leaderboardpos).setInt("score", score);
@@ -84,9 +102,8 @@ class Game {
       else if (main.difficulty == 1.25) leaderboard.getRow(leaderboardpos).setString("difficulty", "amateur");
       else if (main.difficulty == 1.5) leaderboard.getRow(leaderboardpos).setString("difficulty", "pro");
       else if (main.difficulty == 2) leaderboard.getRow(leaderboardpos).setString("difficulty", "legend");
-      leaderboard.sortReverse("score");
       saveTable(leaderboard, "leaderboard.csv");
-      leaderboardpos = 8;
+      leaderboardpos = 7;
       gotHighScore = true;
     }
   }

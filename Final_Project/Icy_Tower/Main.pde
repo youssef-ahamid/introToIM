@@ -11,7 +11,11 @@ class Main {
 
   void run() {
     if (currentScreen == game_screen) game.display();
-    else currentScreen.run();
+    else {
+      currentScreen.run();
+      if (musicOn.on && !THEME.isPlaying()) THEME.play();
+      else if (musicOff.on) THEME.stop();
+    }
     if (currentScreen == leaderboard_screen) {
       fill(0);
       textSize(40);
