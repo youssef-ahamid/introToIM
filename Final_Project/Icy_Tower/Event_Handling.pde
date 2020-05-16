@@ -18,11 +18,11 @@ void keyPressed() {
     if (main.game.name.length() > 0) { // if the name is not empty
       if (key == DELETE || key == BACKSPACE) main.game.name = main.game.name.substring(0, main.game.name.length() - 1); // delete last letter
       else if (key == RETURN || key == ENTER) main.game.gotName = true; 
-      else if ( key == ' ') main.game.name += key;
+      else if ( key == ' ') main.game.name += str(key);
     }
     if ( (int) key < 123 && (int) key >= 97) {
       if (main.game.name.length() == 0) main.game.name += str(key).toUpperCase();
-      else main.game.name += key;
+      else main.game.name += str(key);
     }
   }
 }

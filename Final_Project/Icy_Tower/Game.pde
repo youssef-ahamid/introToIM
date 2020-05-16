@@ -2,13 +2,13 @@ class Game {
   boolean gotHighScore, gotName, flag;
   String name;
   int score, leaderboardpos;
-  float screenShift;
+  float screenShift, bonus;
   ArrayList<Floor> floors;
   Game() {
     name = "";
     gotHighScore = gotName = false;
     floors = new ArrayList<Floor>();
-    screenShift = 0;
+    screenShift = bonus = 0;
     floors.add(new Floor());
     floors.add(new Floor(1, 550));
     floors.add(new Floor(2, 400));
@@ -17,7 +17,7 @@ class Game {
   }
 
   void display() {
-    score = int(player.floor*10*main.difficulty);
+    score = int(player.floor*10*main.difficulty + bonus);
 
     for ( Floor floor : floors) {
       floor.display();
@@ -49,9 +49,11 @@ class Game {
 
   void displayScore() {
     fill(255);
+    pushStyle();
     textFont(myFont);
     textAlign(LEFT);
     text("Score: " + score, 30, height-50);
+    popStyle();
   }
 
   void gameOver() {

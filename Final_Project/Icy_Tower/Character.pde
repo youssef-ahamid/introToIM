@@ -19,6 +19,7 @@ class Character {
 
   void display() {
     if (boostMode) {
+      main.game.bonus += .5;
       if (soundFxOn.on && !SPIN.isPlaying()) SPIN.play();
       mySprite[4].playAnimation(position, 1);
       if (velocity.y > 3) {
@@ -93,7 +94,7 @@ class Character {
   void hitGround() {
     for (int i = main.game.floors.size() - 1; i>= 0; i--) {
       if (position.y + diameter/2   < main.game.floors.get(i).position.y && 
-        position.x >= main.game.floors.get(i).position.x && 
+        position.x >= main.game.floors.get(i).position.x - diameter/2 && 
         position.x <= main.game.floors.get(i).position.x + main.game.floors.get(i).dimentions.x) {
         ground = main.game.floors.get(i).position.y - diameter/2;
         if (main.game.floors.get(i).floor > floor) floor = main.game.floors.get(i).floor;
