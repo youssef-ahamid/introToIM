@@ -78,6 +78,7 @@ void loadStuff() {
   discoDaveSprite[3] = new Sprite("images/sprites/DiscoDave/jumping2-DiscoDave.png", 38, 71, 1);
   discoDaveSprite[4] = new Sprite("images/sprites/DiscoDave/spinning-DiscoDave.png", 60, 60, 12);
   discoDaveSprite[5] = new Sprite("images/sprites/DiscoDave/falling-DiscoDave.png", 38, 71, 1);
+  // load sounds
   THEME = new SoundFile(this, "audio/theme-song.mp3");
   JUMP = new SoundFile(this, "audio/jump.wav");
   JUMP2 = new SoundFile(this, "audio/jump2.wav");
@@ -85,7 +86,7 @@ void loadStuff() {
   SPIN = new SoundFile(this, "audio/spin.wav");
   SELECT = new SoundFile(this, "audio/select.wav");
   PRESS = new SoundFile(this, "audio/press.wav");
-
+  // Load font
   myFont = createFont("RoteFlora.ttf", 50);
 
   // Loading leaderboard

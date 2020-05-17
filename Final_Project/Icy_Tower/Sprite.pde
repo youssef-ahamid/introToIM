@@ -9,9 +9,9 @@ class Sprite { // Sprite object
   }
   void playAnimation(PVector pos, int direction) { 
     if (direction == 1) { // if the sprite image is looking to the right
-      image(img, pos.x, pos.y+main.game.screenShift, wid*1.5, hei*1.5, wid*index, 0, wid*(index+1), hei); // Explained in README (TODO)
+      image(img, pos.x, pos.y+main.game.screenShift, wid*1.5, hei*1.5, wid*index, 0, wid*(index+1), hei); // Explained in google_dino project
     } else {
-      image(img, pos.x, pos.y+main.game.screenShift, wid*1.5, hei*1.5, wid*(index+1), 0, wid*index, hei); // Explained in README (TODO)
+      image(img, pos.x, pos.y+main.game.screenShift, wid*1.5, hei*1.5, wid*(index+1), 0, wid*index, hei); // this flips the image to make the sprite look to the opposite direction.
     }
     if (frameCount % (36/numimgs) == 0) // The speed of the animation as a function of the number of images
       index = (index + 1) % numimgs; // go to next image by incrementing the index
